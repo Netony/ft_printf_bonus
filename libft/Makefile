@@ -1,10 +1,10 @@
-CC = gcc
-AR = ar
-RM = rm -rf
-CFLAGS = -Wall -Werror -Wextra
-ARFLAGS = crus
+NAME = libft.a
 
-SRCS = ft_strncmp.c ft_memchr.c ft_atoi.c ft_memcmp.c ft_strnstr.c \
+SRCS_DIR = srcs
+OBJS_DIR = objs
+INCS_DIR = incs
+
+SOURCES = ft_strncmp.c ft_memchr.c ft_atoi.c ft_memcmp.c ft_strnstr.c \
 	   ft_strrchr.c ft_strchr.c ft_toupper.c ft_tolower.c ft_strlcpy.c \
 	   ft_strlcat.c \
 	   \
@@ -15,43 +15,47 @@ SRCS = ft_strncmp.c ft_memchr.c ft_atoi.c ft_memcmp.c ft_strnstr.c \
 	   \
 	   ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c \
 	   ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c \
-	   ft_putnbr_fd.c
+	   ft_putnbr_fd.c \
+	   \
+	   get_next_line.c get_next_line_utils.c \
+	   \
+	   ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c \
+	   ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c \
 
-SRCS_BONUS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c \
-			 ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c
 
-SRC_H = libft.h
+OBJS = $(addprefix $(OBJS_DIR)/, $(SOURCES:.c=.o))
+SRCS = $(addprefix $(SRCS_DIR)/, $(SOURCES))
 
-OBJS = $(SRCS:.c=.o)
-OBJS_BONUS = $(SRCS_BONUS:.c=.o)
+MAKE = make
+CC = gcc
+AR = ar
+RM = rm
 
-ifdef WITH_BONUS
-	OBJS_C = $(OBJS) $(OBJS_BONUS)
-else
-	OBJS_C = $(OBJS)
-endif
-
-NAME = libft.a
+CFLAGS = -Wall -Werror -Wextra
+ARFLAGS = crus
+RMFLAGS = -rf
 
 all : $(NAME)
 
-bonus :
-	make WITH_BONUS=1 $(NAME)
-
-$(NAME) : $(OBJS_C) $(SRC_H)
-	$(AR) $(ARFLAGS) $@ $^ 
-
-# .c.o :
-#	$(CC) $(CFLAGS) -c -o $@ $<
-
 clean : 
-	$(RM) $(OBJS) $(OBJS_BONUS)
+	$(RM) $(RMFLAGS) $(OBJS)
+	$(RM) $(RMFLAGS) $(OBJS_DIR)
 
-fclean : clean
-	$(RM) $(NAME)
+fclean : 
+	$(MAKE) clean
+	$(RM) $(RMFLAGS) $(NAME)
 
 re : 
 	$(MAKE) fclean
 	$(MAKE) all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re
+
+$(NAME) : $(OBJS)
+	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
+
+$(OBJS_DIR)/%.o : $(SRCS_DIR)/%.c | $(OBJS_DIR)
+	$(CC) $(CFLAGS) $< -c -I $(INCS_DIR) -o $@
+
+$(OBJS_DIR) :
+	mkdir $(OBJS_DIR)

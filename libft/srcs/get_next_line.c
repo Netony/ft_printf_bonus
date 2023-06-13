@@ -6,11 +6,11 @@
 /*   By: dajeon <dajeon@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 14:23:56 by dajeon            #+#    #+#             */
-/*   Updated: 2023/03/26 19:55:10 by dajeon           ###   ########.fr       */
+/*   Updated: 2023/06/13 20:36:05 by dajeon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 static size_t	ft_strlen(const char *s1)
 {
