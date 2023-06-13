@@ -9,12 +9,36 @@ int	ft_iseq(int a, int b)
 	return (a == b);
 }
 
-char	*ft_move_ptr(char *s, char c, int rev)
+char	*ft_move_eq(char *s, char c, int rev)
 {
-	while (*s && (*s == c) == (!rev))
-		s++;
+	int	true;
+
+	true = !rev;
+	while (*s)
+	{
+		if (ft_iseq(*s, c) == true)
+			s++;
+		else
+			break ;
+	}
 	return (s);
 }
+
+char	*ft_move_in(char *s, char *set, int rev)
+{
+	int	true;
+
+	true = !rev;
+	while (*s)
+	{
+		if (ft_isin(*s, set) == true)
+			s++;
+		else
+			break ;
+	}
+	return (s);
+}
+
 int	ft_isneq_len(char *str, char c, int eq)
 {
 	int	len;

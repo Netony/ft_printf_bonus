@@ -6,7 +6,7 @@
 /*   By: dajeon <dajeon@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 19:52:23 by dajeon            #+#    #+#             */
-/*   Updated: 2022/12/14 18:47:09 by dajeon           ###   ########.fr       */
+/*   Updated: 2023/06/11 17:54:11 by dajeon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,24 @@
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
 	t_list	*map;
-	t_list	*cur;
+	t_list	*node;
+	void	*content;
 
-	if (!lst || !f || !del)
+	if (lst == NULL)
 		return (NULL);
-	map = ft_lstnew(f(lst->content));
-	if (map == NULL)
-		return (NULL);
-	cur = map;
-	lst = lst->next;
+	map = NULL;
 	while (lst)
 	{
-		cur->next = ft_lstnew(f(lst->content));
-		if (cur->next)
+		content = f(lst->content);
+		node = ft_lstnew(content);
+		if (node == NULL)
 		{
-			cur = cur->next;
-			lst = lst->next;
-		}
-		else
-		{
+			free(content);
 			ft_lstclear(&map, del);
 			return (NULL);
 		}
+		ft_lstadd_back(&map, node);
+		lst = lst->next;
 	}
 	return (map);
 }

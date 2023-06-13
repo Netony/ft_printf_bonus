@@ -1,16 +1,12 @@
 NAME = a.out
-SOURCES = main.c utils.c list_str.c
-SOURCES_MANDA = 
-SOURCES_BONUS =
 
+SOURCES = utils.c list_str.c ft_strtoc.c
+SOURCES_MANDA = test.c
+SOURCES_BONUS = main.c
+
+LIB = ft
 LIBFT = libft.a
-LIBGNL = libgnl.a
-
-LIB = ft 
-LIB2 = gnl
-
-LIB_DIR = libft
-LIB_DIR2 = get_next_line
+LIBDIR = libft
 
 # **************************************************************************** #
 
@@ -27,9 +23,7 @@ OBJS_MANDA = $(addprefix $(OBJ_DIR)/, $(SOURCES_MANDA:.c=.o))
 OBJS_BONUS = $(addprefix $(OBJ_DIR)/, $(SOURCES_BONUS:.c=.o))
 
 INCS := $(addprefix $(INC_DIR)/, $(INCS))
-
 LIBFT := $(addprefix $(LIB_DIR)/, $(LIBFT))
-LIBGNL := $(addprefix $(LIB_DIR2)/, $(LIBGNL))
 
 ifdef WITH_BONUS
 	OBJS_NEW = $(OBJS_BONUS) $(OBJS) 
@@ -48,19 +42,16 @@ CFLAGS = -Wall -Wextra -Werror
 ARFLAGS = crus
 RMFLAGS = -rf
 
-# Commands ******************************************************************* #
-
 all : 
 	$(RM) $(RMFLAGS) $(OBJS_BONUS)
 	$(MAKE) $(NAME) 
-	./a.out ababcabcd
 
 bonus : 
 	$(RM) $(RMFLAGS) $(OBJS_MANDA)
 	$(MAKE) $(NAME) WITH_BONUS=1
 
 clean :
-	$(RM) $(RMFLAGS) objs objs_bonus */*.a */*.o */*/*.o
+	$(RM) $(RMFLAGS) $(OBJS) $(OBJS_BONUS) */*.a */*/*.o
 
 fclean : 
 	$(MAKE) clean
@@ -72,16 +63,13 @@ re :
 
 .PHONY: all bonus clean fclean re
 
-# Dependency ***************************************************************** #
+# **************************************************************************** #
 
 $(NAME) : $(OBJS_NEW) $(LIBFT) $(LIBGNL)
-	$(CC) $(CFLAGS) $(OBJS_NEW) -I $(INC_DIR) -o $(NAME) -L $(LIB_DIR) -L $(LIB_DIR2) -l $(LIB) -l $(LIB2) 
+	$(CC) $(CFLAGS) $(OBJS_NEW) -o $(NAME) -I $(INC_DIR) -L $(LIBDIR) -l $(LIB)
 
 $(LIBFT): 
-	$(MAKE) -j3 -C $(LIB_DIR) bonus
-
-$(LIBGNL): 
-	$(MAKE) -j3 -C $(LIB_DIR2) all
+	$(MAKE) -j3 -C $(LIBDIR) all 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $< -c -I $(INC_DIR) -o $@

@@ -1,81 +1,67 @@
 #include "lib.h"
 
-typedef struct	s_format
+int	main(int argc, char **argv)
 {
-	int	precision;
-	int	width;
-	int	zero;
-	int	plus;
-	int	space;
-	int	hash;
-	int	conversion;
-}	t_format;
-
-int	test(void);
-
-// int	main(int argc, char **argv)
-int	main(void)
-{
-	/*
-	char	*format;
 	char	*chunk;
 	t_list	*buffers;
 	t_list	*node;
 	int		i;
 
-	if (argc != 2)
-		return (1);
-	format = argv[1];
 	buffers = NULL;
 	i = 0;
 	while (*format)
 	{
-		if (ft_iseq(*format, 'a'))
-		{
-			format = ft_move_pointer(format, 'a', 0);
-		}
+		if (ft_iseq(*format, '%'))
+			chunk = ft_format(&(++format));
 		else
+			chunk = ft_strtok_c(&format, '%');
+		node = ft_lstnew((void *)chunk);
+		if (node == NULL)
 		{
-			chunk = ft_strtoc(&format, 'a');
-			node = ft_lstnew((void *)chunk);
-			if (node == NULL)
-			{
-				free(chunk);
-				ft_lstclear(&buffers, free);
-				return (1);
-			}
-			ft_lstadd_back(&buffers, node);
+			free(chunk);
+			ft_lstclear(&buffers, free);
+			return (1);
 		}
+		ft_lstadd_back(&buffers, node);
 	}
 	ft_lstiter(buffers, ft_lstprint_str);
 	return (0);
-	*/
 }
 
-
-int	ft_format(char *format)
+char	*ft_format(char **fptr)
 {
-	t_format	data;
+	t_finfo	info;
 
-	while (ft_iseq(*format, '.'))
-}
-
-char	*ft_getpre(char **str, char c)
-{
-	int		len;
-	char	*toc;
-
-	len = ft_isnin_len(*str, "0123456789", 0);
-	if (len == 0)
-	if (len > 0)
+	while (isin(**fptr, "+# 0"))
 	{
-		toc = (char *)malloc(sizeof(char) * (len + 1));
-		if (toc == NULL)
-			return (NULL);
-		ft_strlcpy(toc, *str, len + 1);
+		if (iseq(**fptr, '+'))
+			info->plus = 1;
+		else if (iseq(**fptr, '#'))
+			info->hash = 1;
+		else if (iseq(**fptr, ' '))
+			info->space = 1;
+		else if (iseq(**fptr, ' '))
+			info->zero = 1;
+		*fptr += 1;
 	}
+	if (isin(**fptr, "0123456789"))
+		info->width = ft_atoi(*fptr);
+	if (iseq(**fptr, '.'))
+		info->precision = ft_getprec(fptr++);
+	if (isin(**fptr, "cspdiuxX%"))
+		info->conversion = *((*fptr)++);
+}
+
+int	ft_getprec(char **fptr)
+{
+	int	len;
+	int	prec;
+
+	len = ft_isin_len(*fptr, "0123456789", 0);
+	if (len > 0)
+		prec = ft_atoi(*fptr);
 	else
-		toc = NULL;
-	*str += len;
-	return (toc);
+		prec = 0;
+	*fptr += len;
+	return (prec);
 }
